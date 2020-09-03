@@ -6,11 +6,11 @@ const importFiles = require('./lib/import-files')
 const createNetwork = require('./lib/network')
 const stats = require('./lib/stats')
 const serveHttp = require('./lib/serve')
-const debug = require('debug')('dat-node')
+const debug = require('debug')('dwebx-node')
 
-module.exports = (...args) => new Dat(...args)
+module.exports = (...args) => new DWebX(...args)
 
-class Dat {
+class DWebX {
   constructor (archive, opts) {
     assert.ok(archive, 'archive required')
 
@@ -129,7 +129,7 @@ class Dat {
 
   close (cb) {
     cb = cb || noop
-    if (this._closed) return cb(new Error('Dat is already closed'))
+    if (this._closed) return cb(new Error('DWebX is already closed'))
 
     var self = this
     self._closed = true
@@ -161,7 +161,7 @@ class Dat {
     }
   }
 }
-Dat.prototype.joinNetwork = Dat.prototype.join
-Dat.prototype.leaveNetwork = Dat.prototype.leave
+DWebX.prototype.joinNetwork = DWebX.prototype.join
+DWebX.prototype.leaveNetwork = DWebX.prototype.leave
 
 function noop () { }

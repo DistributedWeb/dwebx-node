@@ -2,7 +2,7 @@ var fs = require('fs')
 var path = require('path')
 var mirror = require('mirror-folder')
 var ram = require('random-access-memory')
-var Dat = require('..')
+var DWebX = require('..')
 
 var key = process.argv[2]
 if (!key) {
@@ -13,17 +13,17 @@ if (!key) {
 var dest = path.join(__dirname, 'tmp')
 fs.mkdirSync(dest)
 
-Dat(ram, { key: key, sparse: true }, function (err, dat) {
+DWebX(ram, { key: key, sparse: true }, function (err, dwebx) {
   if (err) throw err
 
-  var network = dat.joinNetwork()
+  var network = dwebx.joinNetwork()
   network.once('connection', function () {
     console.log('Connected')
   })
-  dat.archive.metadata.update(download)
+  dwebx.archive.metadata.update(download)
 
   function download () {
-    var progress = mirror({ fs: dat.archive, name: '/' }, dest, function (err) {
+    var progress = mirror({ fs: dwebx.archive, name: '/' }, dest, function (err) {
       if (err) throw err
       console.log('Done')
     })
@@ -32,5 +32,5 @@ Dat(ram, { key: key, sparse: true }, function (err, dat) {
     })
   }
 
-  console.log(`Downloading: ${dat.key.toString('hex')}\n`)
+  console.log(`Downloading: ${dwebx.key.toString('hex')}\n`)
 })

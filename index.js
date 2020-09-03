@@ -1,23 +1,23 @@
 var assert = require('assert')
 var fs = require('fs')
 var path = require('path')
-var hyperdrive = require('hyperdrive')
-var resolveDatLink = require('dat-link-resolve')
-var debug = require('debug')('dat-node')
+var ddrive = require('ddrive')
+var resolveDatLink = require('dwebx-link-resolve')
+var debug = require('debug')('dwebx-node')
 var datStore = require('./lib/storage')
-var Dat = require('./dat')
+var DWebX = require('./dwebx')
 
 module.exports = createDat
 
 /**
- * Create a Dat instance, archive storage, and ready the archive.
- * @param {string|object} dirOrStorage - Directory or hyperdrive storage object.
- * @param {object} [opts] - Dat-node options and any hyperdrive init options.
- * @param {String|Buffer} [opts.key] - Hyperdrive key
+ * Create a DWebX instance, archive storage, and ready the archive.
+ * @param {string|object} dirOrStorage - Directory or ddrive storage object.
+ * @param {object} [opts] - DWebX-node options and any ddrive init options.
+ * @param {String|Buffer} [opts.key] - DDrive key
  * @param {Boolean} [opts.createIfMissing = true] - Create storage if it does not exit.
  * @param {Boolean} [opts.errorIfExists = false] - Error if storage exists.
  * @param {Boolean} [opts.temp = false] - Use random-access-memory for temporary storage
- * @param {function(err, dat)} cb - callback that returns `Dat` instance
+ * @param {function(err, dwebx)} cb - callback that returns `DWebX` instance
  * @see defaultStorage for storage information
  */
 function createDat (dirOrStorage, opts, cb) {
@@ -25,9 +25,9 @@ function createDat (dirOrStorage, opts, cb) {
     cb = opts
     opts = {}
   }
-  assert.ok(dirOrStorage, 'dat-node: directory or storage required')
-  assert.strictEqual(typeof opts, 'object', 'dat-node: opts should be type object')
-  assert.strictEqual(typeof cb, 'function', 'dat-node: callback required')
+  assert.ok(dirOrStorage, 'dwebx-node: directory or storage required')
+  assert.strictEqual(typeof opts, 'object', 'dwebx-node: opts should be type object')
+  assert.strictEqual(typeof cb, 'function', 'dwebx-node: callback required')
 
   var archive
   var key = opts.key
@@ -50,17 +50,17 @@ function createDat (dirOrStorage, opts, cb) {
    * @private
    */
   function checkIfExists () {
-    // Create after we check for pre-sleep .dat stuff
+    // Create after we check for pre-sleep .dwebx stuff
     var createAfterValid = (createIfMissing && !errorIfExists)
 
-    var missingError = new Error('Dat storage does not exist.')
+    var missingError = new Error('DWebX storage does not exist.')
     missingError.name = 'MissingError'
-    var existsError = new Error('Dat storage already exists.')
+    var existsError = new Error('DWebX storage already exists.')
     existsError.name = 'ExistsError'
-    var oldError = new Error('Dat folder contains incompatible metadata. Please remove your metadata (rm -rf .dat).')
+    var oldError = new Error('DWebX folder contains incompatible metadata. Please remove your metadata (rm -rf .dwebx).')
     oldError.name = 'IncompatibleError'
 
-    fs.readdir(path.join(opts.dir, '.dat'), function (err, files) {
+    fs.readdir(path.join(opts.dir, '.dwebx'), function (err, files) {
       // TODO: omg please make this less confusing.
       var noDat = !!(err || !files.length)
       hasDat = !noDat
@@ -84,8 +84,8 @@ function createDat (dirOrStorage, opts, cb) {
    */
   function create () {
     if (dir && !opts.temp && !key && (opts.indexing !== false)) {
-      // Only set opts.indexing if storage is dat-storage
-      // TODO: this should be an import option instead, https://github.com/mafintosh/hyperdrive/issues/160
+      // Only set opts.indexing if storage is dwebx-storage
+      // TODO: this should be an import option instead, https://github.com/distributedweb/ddrive/issues/160
       opts.indexing = true
     }
     if (!key) return createArchive()
@@ -97,7 +97,7 @@ function createDat (dirOrStorage, opts, cb) {
     })
 
     function createArchive () {
-      archive = hyperdrive(storage, key, opts)
+      archive = ddrive(storage, key, opts)
       archive.on('error', cb)
       archive.ready(function () {
         debug('archive ready. version:', archive.version)
@@ -108,7 +108,7 @@ function createDat (dirOrStorage, opts, cb) {
         }
         archive.removeListener('error', cb)
 
-        cb(null, Dat(archive, opts))
+        cb(null, DWebX(archive, opts))
       })
     }
   }

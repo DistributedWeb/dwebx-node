@@ -1,136 +1,136 @@
-# dat-node
+# dwebx-node
 
-> **dat-node** is a high-level module for building Dat applications on the file system.
+> **dwebx-node** is a high-level module for building DWebX applications on the file system.
 
-[![npm][0]][1] [![Travis][2]][3] [![Test coverage][4]][5] [![Greenkeeper badge](https://badges.greenkeeper.io/datproject/dat-node.svg)](https://greenkeeper.io/)
+[![npm][0]][1] [![Travis][2]][3] [![Test coverage][4]][5] [![Greenkeeper badge](https://badges.greenkeeper.io/datproject/dwebx-node.svg)](https://greenkeeper.io/)
 
-[Dat](http://datproject.org) is a decentralized tool for distributing data and
+[DWebX](http://dwebx.org) is a decentralized tool for distributing data and
 files, built for scientific and research data.
-You can start using Dat today in these client applications:
+You can start using DWebX today in these client applications:
 
-* [Dat Command Line](https://github.com/datproject/dat): Use Dat in the command line
-* [Dat Desktop](https://github.com/datproject/dat-desktop): A desktop application for Dat
-* [Beaker Browser](https://beakerbrowser.com): An experimental P2P browser with Dat built in
+* [DWebX Command Line](https://github.com/distributedweb/dwebx): Use DWebX in the command line
+* [DWebX Desktop](https://github.com/distributedweb/dwebx-desktop): A desktop application for DWebX
+* [DBrowserX Browser](https://dbrowser.com): An experimental P2P browser with DWebX built in
 
-#### Dat Project Documentation & Resources
+#### DWebX Project Documentation & Resources
 
-* [Dat Project Docs](http://docs.datproject.org/)
-* [Dat Protocol](https://www.datprotocol.com/)
-* [Gitter Chat](https://gitter.im/datproject/discussions) or [#dat on IRC](http://webchat.freenode.net/?channels=dat)
+* [DWebX Project Docs](http://docs.dwebx.org/)
+* [DWebX Protocol](https://www.dwebx.net/)
+* [Gitter Chat](https://gitter.im/datproject/discussions) or [#dwebx on IRC](http://webchat.freenode.net/?channels=dwebx)
 
 ### Features
 
-* High-level glue for common Dat and [hyperdrive](https://github.com/mafintosh/hyperdrive) modules.
-* Sane defaults and consistent management of storage & secret keys across applications, using [dat-storage](https://github.com/datproject/dat-storage).
-* Easily connect to the Dat network, using [discovery-swarm](https://github.com/mafintosh/discovery-swarm)
-* Import files from the file system, using [mirror-folder](https://github.com/mafintosh/mirror-folder/)
-* Serve dats over http with [hyperdrive-http](https://github.com/joehand/hyperdrive-http)
+* High-level glue for common DWebX and [ddrive](https://github.com/distributedweb/ddrive) modules.
+* Sane defaults and consistent management of storage & secret keys across applications, using [dwebx-storage](https://github.com/distributedweb/dwebx-storage).
+* Easily connect to the DWebX network, using [discovery-swarm](https://github.com/distributedweb/discovery-swarm)
+* Import files from the file system, using [mirror-folder](https://github.com/distributedweb/mirror-folder/)
+* Serve dvaults over http with [ddrive-http](https://github.com/joehand/ddrive-http)
 * Access APIs to lower level modules with a single `require`!
 
 #### Browser Support
 
-Many of our dependencies work in the browser, but `dat-node` is tailored for file system applications. See [dat-js](https://github.com/datproject/dat-js) if you want to build browser-friendly Dat applications.
+Many of our dependencies work in the browser, but `dwebx-node` is tailored for file system applications. See [dwebx-js](https://github.com/distributedweb/dwebx-js) if you want to build browser-friendly DWebX applications.
 
 ## Example
 
-To send files via Dat:
+To send files via DWebX:
 
-1. Tell dat-node where the files are.
+1. Tell dwebx-node where the files are.
 2. Import the files.
-3. Share the files on the Dat network! (And share the link)
+3. Share the files on the DWebX network! (And share the link)
 
 ```js
-var Dat = require('dat-node')
+var DWebX = require('dwebx-node')
 
 // 1. My files are in /joe/cat-pic-analysis
-Dat('/joe/cat-pic-analysis', function (err, dat) {
+DWebX('/joe/cat-pic-analysis', function (err, dwebx) {
   if (err) throw err
 
   // 2. Import the files
-  dat.importFiles()
+  dwebx.importFiles()
 
   // 3. Share the files on the network!
-  dat.joinNetwork()
+  dwebx.joinNetwork()
   // (And share the link)
-  console.log('My Dat link is: dat://', dat.key.toString('hex'))
+  console.log('My DWebX link is: dwebx://', dwebx.key.toString('hex'))
 })
 ```
 
-These files are now available to share over the dat network via the key printed in the console.
+These files are now available to share over the dwebx network via the key printed in the console.
 
-To download the files, you can make another dat-node instance in a different folder. This time we also have three steps:
+To download the files, you can make another dwebx-node instance in a different folder. This time we also have three steps:
 
-1. Tell dat where I want to download the files.
-2. Tell dat what the link is.
+1. Tell dwebx where I want to download the files.
+2. Tell dwebx what the link is.
 3. Join the network and download!
 
 ```js
-var Dat = require('dat-node')
+var DWebX = require('dwebx-node')
 
-// 1. Tell Dat where to download the files
-Dat('/download/cat-analysis', {
-  // 2. Tell Dat what link I want
-  key: '<dat-key>' // (a 64 character hash from above)
-}, function (err, dat) {
+// 1. Tell DWebX where to download the files
+DWebX('/download/cat-analysis', {
+  // 2. Tell DWebX what link I want
+  key: '<dwebx-key>' // (a 64 character hash from above)
+}, function (err, dwebx) {
   if (err) throw err
 
   // 3. Join the network & download (files are automatically downloaded)
-  dat.joinNetwork()
+  dwebx.joinNetwork()
 })
 ```
 
 That's it! By default, all files are automatically downloaded when you connect to the other users.
 
-Dig into more use cases below and please let us know if you have questions! You can [open a new issue](https://github.com/datproject/dat-node/issues) or talk to nice humans in [our chat room](https://gitter.im/datproject/discussions).
+Dig into more use cases below and please let us know if you have questions! You can [open a new issue](https://github.com/distributedweb/dwebx-node/issues) or talk to nice humans in [our chat room](https://gitter.im/datproject/discussions).
 
 ### Example Applications
 
-* [Dat CLI](https://github.com/datproject/dat): We use dat-node in the dat CLI.
-* [Dat Desktop](https://github.com/datproject/dat-desktop): The Dat Desktop application manages multiple dat-node instances via [dat-worker](https://github.com/juliangruber/dat-worker).
+* [DWebX CLI](https://github.com/distributedweb/dwebx): We use dwebx-node in the dwebx CLI.
+* [DWebX Desktop](https://github.com/distributedweb/dwebx-desktop): The DWebX Desktop application manages multiple dwebx-node instances via [dwebx-worker](https://github.com/juliangruber/dwebx-worker).
 * See the [examples folder](examples) for a minimal share + download usage.
-* And more! Let us know if you have a neat dat-node application to add here.
+* And more! Let us know if you have a neat dwebx-node application to add here.
 
 ## Usage
 
-All dat-node applications have a similar structure around three main elements:
+All dwebx-node applications have a similar structure around three main elements:
 
 1. **Storage** - where the files and metadata are stored.
 2. **Network** - connecting to other users to upload or download data.
-3. **Adding Files** - adding files from the file system to the hyperdrive archive.
+3. **Adding Files** - adding files from the file system to the ddrive archive.
 
 We'll go through what these are for and a few of the common usages of each element.
 
 ### Storage
 
-Every dat archive has **storage**, this is the required first argument for dat-node. By default, we use [dat-storage](http://github.com/datproject/dat-storage) which stores the secret key in `~/.dat/` and the rest of the data in `dir/.dat`. Other common options are:
+Every dwebx archive has **storage**, this is the required first argument for dwebx-node. By default, we use [dwebx-storage](http://github.com/distributedweb/dwebx-storage) which stores the secret key in `~/.dwebx/` and the rest of the data in `dir/.dwebx`. Other common options are:
 
-* **Persistent storage**: Stored files in `/my-dir` and metadata in `my-dir/.dat` by passing `/my-dir` as the first argument.
+* **Persistent storage**: Stored files in `/my-dir` and metadata in `my-dir/.dwebx` by passing `/my-dir` as the first argument.
 * **Temporary Storage**: Use the `temp: true` option to keep metadata stored in memory.
 
 ```js
 // Permanent Storage
-Dat('/my-dir', function (err, dat) {
-  // Do Dat Stuff
+DWebX('/my-dir', function (err, dwebx) {
+  // Do DWebX Stuff
 })
 
 // Temporary Storage
-Dat('/my-dir', {temp: true}, function (err, dat) {
-  // Do Dat Stuff
+DWebX('/my-dir', {temp: true}, function (err, dwebx) {
+  // Do DWebX Stuff
 })
 ```
 
-Both of these will import files from `/my-dir` when doing `dat.importFiles()` but only the first will make a `.dat` folder and keep the metadata on disk.
+Both of these will import files from `/my-dir` when doing `dwebx.importFiles()` but only the first will make a `.dwebx` folder and keep the metadata on disk.
 
-The storage argument can also be passed through to hyperdrive for more advanced storage use cases.
+The storage argument can also be passed through to ddrive for more advanced storage use cases.
 
 ### Network
 
-Dat is all about the network! You'll almost always want to join the network right after you create your Dat:
+DWebX is all about the network! You'll almost always want to join the network right after you create your DWebX:
 
 ```js
-Dat('/my-dir', function (err, dat) {
-  dat.joinNetwork()
-  dat.network.on('connection', function () {
+DWebX('/my-dir', function (err, dwebx) {
+  dwebx.joinNetwork()
+  dwebx.network.on('connection', function () {
     console.log('I connected to someone!')
   })
 })
@@ -140,17 +140,17 @@ Dat('/my-dir', function (err, dat) {
 
 Remember, if you are downloading - metadata and file downloads will happen automatically once you join the network!
 
-Dat runs on a peer to peer network, sometimes there may not be anyone online for a particular key. You can make your application more user friendly by using the callback in `joinNetwork`:
+DWebX runs on a peer to peer network, sometimes there may not be anyone online for a particular key. You can make your application more user friendly by using the callback in `joinNetwork`:
 
 ```js
 // Downloading <key> with joinNetwork callback
-Dat('/my-dir', {key: '<key>'}, function (err, dat) {
-  dat.joinNetwork(function (err) {
+DWebX('/my-dir', {key: '<key>'}, function (err, dwebx) {
+  dwebx.joinNetwork(function (err) {
     if (err) throw err
 
     // After the first round of network checks, the callback is called
     // If no one is online, you can exit and let the user know.
-    if (!dat.network.connected || !dat.network.connecting) {
+    if (!dwebx.network.connected || !dwebx.network.connecting) {
       console.error('No users currently online for that key.')
       process.exit(1)
     }
@@ -164,29 +164,29 @@ If you want to control what files and metadata are downloaded, you can use the s
 
 ```js
 // Downloading <key> with sparse option
-Dat('/my-dir', {key: '<key>', sparse: true}, function (err, dat) {
-  dat.joinNetwork()
+DWebX('/my-dir', {key: '<key>', sparse: true}, function (err, dwebx) {
+  dwebx.joinNetwork()
 
-  // Manually download files via the hyperdrive API:
-  dat.archive.readFile('/cat-locations.txt', function (err, content) {
+  // Manually download files via the ddrive API:
+  dwebx.archive.readFile('/cat-locations.txt', function (err, content) {
     console.log(content) // prints cat-locations.txt file!
   })
 })
 ```
 
-Dat will only download metadata and content for the parts you request with `sparse` mode!
+DWebX will only download metadata and content for the parts you request with `sparse` mode!
 
 ### Importing Files
 
-There are many ways to get files imported into an archive! Dat node provides a few basic methods. If you need more advanced imports, you can use the `archive.createWriteStream()` methods directly.
+There are many ways to get files imported into an archive! DWebX node provides a few basic methods. If you need more advanced imports, you can use the `archive.createWriteStream()` methods directly.
 
-By default, just call `dat.importFiles()` to import from the directory you initialized with. You can watch that folder for changes by setting the watch option:
+By default, just call `dwebx.importFiles()` to import from the directory you initialized with. You can watch that folder for changes by setting the watch option:
 
 ```js
-Dat('/my-data', function (err, dat) {
+DWebX('/my-data', function (err, dwebx) {
   if (err) throw err
 
-  var progress = dat.importFiles({watch: true}) // with watch: true, there is no callback
+  var progress = dwebx.importFiles({watch: true}) // with watch: true, there is no callback
   progress.on('put', function (src, dest) {
     console.log('Importing ', src.name, ' into archive')
   })
@@ -196,10 +196,10 @@ Dat('/my-data', function (err, dat) {
 You can also import from another directory:
 
 ```js
-Dat('/my-data', function (err, dat) {
+DWebX('/my-data', function (err, dwebx) {
   if (err) throw err
 
-  dat.importFiles('/another-dir', function (err) {
+  dwebx.importFiles('/another-dir', function (err) {
     console.log('done importing another-dir')
   })
 })
@@ -209,46 +209,46 @@ That covers some of the common use cases, let us know if there are more to add! 
 
 ## API
 
-### `Dat(dir|storage, [opts], callback(err, dat))`
+### `DWebX(dir|storage, [opts], callback(err, dwebx))`
 
-Initialize a Dat Archive in `dir`. If there is an existing Dat Archive, the archive will be resumed.
+Initialize a DWebX Archive in `dir`. If there is an existing DWebX Archive, the archive will be resumed.
 
 #### Storage
 
-* `dir` (Default) - Use [dat-storage](https://github.com/datproject/dat-storage) inside `dir`. This stores files as files, sleep files inside `.dat`, and the secret key in the user's home directory.
+* `dir` (Default) - Use [dwebx-storage](https://github.com/distributedweb/dwebx-storage) inside `dir`. This stores files as files, sleep files inside `.dwebx`, and the secret key in the user's home directory.
 * `dir` with `opts.latest: false` - Store as SLEEP files, including storing the content as a `content.data` file. This is useful for storing all history in a single flat file.
 * `dir` with `opts.temp: true` - Store everything in memory (including files).
-* `storage` function - pass a custom storage function along to hyperdrive, see dat-storage for an example.
+* `storage` function - pass a custom storage function along to ddrive, see dwebx-storage for an example.
 
-Most options are passed directly to the module you're using (e.g. `dat.importFiles(opts)`. However, there are also some initial `opts` can include:
+Most options are passed directly to the module you're using (e.g. `dwebx.importFiles(opts)`. However, there are also some initial `opts` can include:
 
 ```js
 opts = {
-  key: '<dat-key>', // existing key to create archive with or resume
+  key: '<dwebx-key>', // existing key to create archive with or resume
   temp: false, // Use random-access-memory as the storage.
 
-  // Hyperdrive options
+  // DDrive options
   sparse: false // download only files you request
 }
 ```
 
-The callback, `cb(err, dat)`, includes a `dat` object that has the following properties:
+The callback, `cb(err, dwebx)`, includes a `dwebx` object that has the following properties:
 
-* `dat.key`: key of the dat (this will be set later for non-live archives)
-* `dat.archive`: Hyperdrive archive instance.
-* `dat.path`: Path of the Dat Archive
-* `dat.live`: `archive.live`
-* `dat.writable`: Is the `archive` writable?
-* `dat.resumed`: `true` if the archive was resumed from an existing database
-* `dat.options`: All options passed to Dat and the other submodules
+* `dwebx.key`: key of the dwebx (this will be set later for non-live archives)
+* `dwebx.archive`: DDrive archive instance.
+* `dwebx.path`: Path of the DWebX Archive
+* `dwebx.live`: `archive.live`
+* `dwebx.writable`: Is the `archive` writable?
+* `dwebx.resumed`: `true` if the archive was resumed from an existing database
+* `dwebx.options`: All options passed to DWebX and the other submodules
 
 ### Module Interfaces
 
-**`dat-node` provides an easy interface to common Dat modules for the created Dat Archive on the `dat` object provided in the callback:**
+**`dwebx-node` provides an easy interface to common DWebX modules for the created DWebX Archive on the `dwebx` object provided in the callback:**
 
-#### `var network = dat.joinNetwork([opts], [cb])`
+#### `var network = dwebx.joinNetwork([opts], [cb])`
 
-Join the network to start transferring data for `dat.key`, using [discovery-swarm](https://github.com/mafintosh/discovery-swarm). You can also use `dat.join([opts], [cb])`.
+Join the network to start transferring data for `dwebx.key`, using [discovery-swarm](https://github.com/distributedweb/discovery-swarm). You can also use `dwebx.join([opts], [cb])`.
 
 If you specify `cb`, it will be called *when the first round* of discovery has completed. This is helpful to check immediately if peers are available and if not fail gracefully, more similar to http requests.
 
@@ -266,12 +266,12 @@ Returns a `network` object with properties:
 opts = {
   upload: true, // announce and upload data to other peers
   download: true, // download data from other peers
-  port: 3282, // port for discovery swarm
+  port: 1776, // port for discovery swarm
   utp: true, // use utp in discovery swarm
   tcp: true // use tcp in discovery swarm
 }
 
-//Defaults from datland-swarm-defaults can also be overwritten:
+//Defaults from dwebx-config can also be overwritten:
 
 opts = {
   dns: {
@@ -284,17 +284,17 @@ opts = {
 }
 ```
 
-Returns a [discovery-swarm](https://github.com/mafintosh/discovery-swarm) instance.
+Returns a [discovery-swarm](https://github.com/distributedweb/discovery-swarm) instance.
 
-#### `dat.leaveNetwork()` or `dat.leave()`
+#### `dwebx.leaveNetwork()` or `dwebx.leave()`
 
 Leaves the network for the archive.
 
-#### `var importer = dat.importFiles([src], [opts], [cb])`
+#### `var importer = dwebx.importFiles([src], [opts], [cb])`
 
 **Archive must be writable to import.**
 
-Import files to your Dat Archive from the directory using [mirror-folder](https://github.com/mafintosh/mirror-folder/).
+Import files to your DWebX Archive from the directory using [mirror-folder](https://github.com/distributedweb/mirror-folder/).
 
 * `src` - By default, files will be imported from the folder where the archive was initiated. Import files from another directory by specifying `src`.
 * `opts` - options passed to mirror-folder (see below).
@@ -320,9 +320,9 @@ Options include:
 ```js
 var opts = {
   count: true, // do an initial dry run import for rendering progress
-  ignoreHidden: true, // ignore hidden files  (if false, .dat will still be ignored)
-  ignoreDirs: true, // do not import directories (hyperdrive does not need them and it pollutes metadata)
-  useDatIgnore: true, // ignore entries in the `.datignore` file from import dir target.
+  ignoreHidden: true, // ignore hidden files  (if false, .dwebx will still be ignored)
+  ignoreDirs: true, // do not import directories (ddrive does not need them and it pollutes metadata)
+  useDatIgnore: true, // ignore entries in the `.dwebxignore` file from import dir target.
   ignore: // (see below for default info) anymatch expression to ignore files
   watch: false, // watch files for changes & import on change (archive must be live)
 }
@@ -330,21 +330,21 @@ var opts = {
 
 ##### Ignoring Files
 
-You can use a `.datignore` file in the imported directory, `src`, to ignore any the user specifies. This is done by default.
+You can use a `.dwebxignore` file in the imported directory, `src`, to ignore any the user specifies. This is done by default.
 
-`dat-node` uses [dat-ignore](https://github.com/joehand/dat-ignore) to provide a default ignore option, ignoring the `.dat` folder and all hidden files or directories. Use `opts.ignoreHidden = false` to import hidden files or folders, except the `.dat` directory.
+`dwebx-node` uses [dwebx-ignore](https://github.com/joehand/dwebx-ignore) to provide a default ignore option, ignoring the `.dwebx` folder and all hidden files or directories. Use `opts.ignoreHidden = false` to import hidden files or folders, except the `.dwebx` directory.
 
-*It's important that the `.dat` folder is not imported because it contains a private key that allows the owner to write to the archive.*
+*It's important that the `.dwebx` folder is not imported because it contains a private key that allows the owner to write to the archive.*
 
-#### `var stats = dat.trackStats()`
+#### `var stats = dwebx.trackStats()`
 
 ##### `stats.on('update')`
 
 Emitted when archive stats are updated. Get new stats with `stats.get()`.
 
-##### `var st = dat.stats.get()`
+##### `var st = dwebx.stats.get()`
 
-`dat.trackStats()` adds a `stats` object to `dat`.  Get general archive stats for the latest version:
+`dwebx.trackStats()` adds a `stats` object to `dwebx`.  Get general archive stats for the latest version:
 
 ```js
 {
@@ -358,49 +358,49 @@ Emitted when archive stats are updated. Get new stats with `stats.get()`.
 
 ##### `stats.network`
 
-Get upload and download speeds: `stats.network.uploadSpeed` or `stats.network.downloadSpeed`. Transfer speeds are tracked using [hyperdrive-network-speed](https://github.com/joehand/hyperdrive-network-speed/).
+Get upload and download speeds: `stats.network.uploadSpeed` or `stats.network.downloadSpeed`. Transfer speeds are tracked using [ddrive-network-speed](https://github.com/joehand/ddrive-network-speed/).
 
 ##### `var peers = stats.peers`
 
 * `peers.total` - total number of connected peers
 * `peers.complete` - connected peers with all the content data
 
-#### `var server = dat.serveHttp(opts)`
+#### `var server = dwebx.serveHttp(opts)`
 
-Serve files over http via [hyperdrive-http](https://github.com/joehand/hyperdrive-http). Returns a node http server instance.
+Serve files over http via [ddrive-http](https://github.com/joehand/ddrive-http). Returns a node http server instance.
 
 ```js
 opts = {
   port: 8080, // http port
   live: true, // live update directory index listing
-  footer: 'Served via Dat.', // Set a footer for the index listing
-  exposeHeaders: false // expose dat key in headers
+  footer: 'Served via DWebX.', // Set a footer for the index listing
+  exposeHeaders: false // expose dwebx key in headers
 }
 ```
 
-#### `dat.pause()`
+#### `dwebx.pause()`
 
-Pause all upload & downloads. Currently, this is the same as `dat.leaveNetwork()`, which leaves the network and destroys the swarm. Discovery will happen again on `resume()`.
+Pause all upload & downloads. Currently, this is the same as `dwebx.leaveNetwork()`, which leaves the network and destroys the swarm. Discovery will happen again on `resume()`.
 
-#### `dat.resume()`
+#### `dwebx.resume()`
 
-Resume network activity. Current, this is the same as `dat.joinNetwork()`.
+Resume network activity. Current, this is the same as `dwebx.joinNetwork()`.
 
-#### `dat.close(cb)`
+#### `dwebx.close(cb)`
 
-Stops replication and closes all the things opened for dat-node, including:
+Stops replication and closes all the things opened for dwebx-node, including:
 
-* `dat.archive.close(cb)`
-* `dat.network.close(cb)`
-* `dat.importer.destroy()` (file watcher)
+* `dwebx.archive.close(cb)`
+* `dwebx.network.close(cb)`
+* `dwebx.importer.destroy()` (file watcher)
 
 ## License
 
 MIT
 
-[0]: https://img.shields.io/npm/v/dat-node.svg?style=flat-square
-[1]: https://npmjs.org/package/dat-node
-[2]: https://img.shields.io/travis/datproject/dat-node/master.svg?style=flat-square
-[3]: https://travis-ci.org/datproject/dat-node
-[4]: https://img.shields.io/codecov/c/github/datproject/dat-node/master.svg?style=flat-square
-[5]: https://codecov.io/github/datproject/dat-node
+[0]: https://img.shields.io/npm/v/dwebx-node.svg?style=flat-square
+[1]: https://npmjs.org/package/dwebx-node
+[2]: https://img.shields.io/travis/datproject/dwebx-node/master.svg?style=flat-square
+[3]: https://travis-ci.org/datproject/dwebx-node
+[4]: https://img.shields.io/codecov/c/github/datproject/dwebx-node/master.svg?style=flat-square
+[5]: https://codecov.io/github/datproject/dwebx-node

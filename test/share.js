@@ -6,7 +6,7 @@ var ram = require('random-access-memory')
 var countFiles = require('count-files')
 var helpers = require('./helpers')
 
-var Dat = require('..')
+var DWebX = require('..')
 
 // os x adds this if you view the fixtures in finder and breaks the file count assertions
 try { fs.unlinkSync(path.join(__dirname, 'fixtures', '.DS_Store')) } catch (e) { /* ignore error */ }
@@ -25,33 +25,33 @@ test('share: prep', function (t) {
   })
 })
 
-test('share: create dat with default ops', function (t) {
-  Dat(fixtures, function (err, dat) {
+test('share: create dwebx with default ops', function (t) {
+  DWebX(fixtures, function (err, dwebx) {
     t.error(err, 'cb err okay')
-    t.ok(dat.path === fixtures, 'correct directory')
-    t.ok(dat.archive, 'has archive')
-    t.ok(dat.key, 'has key')
-    t.ok(dat.live, 'is live')
-    t.ok(dat.writable, 'is writable')
-    t.ok(!dat.resumed, 'is not resumed')
+    t.ok(dwebx.path === fixtures, 'correct directory')
+    t.ok(dwebx.archive, 'has archive')
+    t.ok(dwebx.key, 'has key')
+    t.ok(dwebx.live, 'is live')
+    t.ok(dwebx.writable, 'is writable')
+    t.ok(!dwebx.resumed, 'is not resumed')
 
-    fs.stat(path.join(fixtures, '.dat'), function (err, stat) {
+    fs.stat(path.join(fixtures, '.dwebx'), function (err, stat) {
       t.error(err)
-      t.pass('creates .dat dir')
+      t.pass('creates .dwebx dir')
     })
 
-    liveKey = dat.key
+    liveKey = dwebx.key
     var putFiles = 0
-    var stats = dat.trackStats()
-    var network = dat.joinNetwork()
+    var stats = dwebx.trackStats()
+    var network = dwebx.joinNetwork()
 
     network.once('listening', function () {
       t.pass('network listening')
     })
 
-    var progress = dat.importFiles(function (err) {
+    var progress = dwebx.importFiles(function (err) {
       t.error(err, 'file import err okay')
-      var archive = dat.archive
+      var archive = dwebx.archive
       var st = stats.get()
       if (archive.version === st.version) return check()
       stats.once('update', check)
@@ -69,7 +69,7 @@ test('share: create dat with default ops', function (t) {
 
         helpers.verifyFixtures(t, archive, function (err) {
           t.ifError(err)
-          dat.close(function (err) {
+          dwebx.close(function (err) {
             t.ifError(err)
             t.pass('close okay')
             t.end()
@@ -84,17 +84,17 @@ test('share: create dat with default ops', function (t) {
   })
 })
 
-test('share: resume with .dat folder', function (t) {
-  Dat(fixtures, function (err, dat) {
+test('share: resume with .dwebx folder', function (t) {
+  DWebX(fixtures, function (err, dwebx) {
     t.error(err, 'cb without error')
-    t.ok(dat.writable, 'dat still writable')
-    t.ok(dat.resumed, 'resume flag set')
-    t.same(liveKey, dat.key, 'key matches previous key')
-    var stats = dat.trackStats()
+    t.ok(dwebx.writable, 'dwebx still writable')
+    t.ok(dwebx.resumed, 'resume flag set')
+    t.same(liveKey, dwebx.key, 'key matches previous key')
+    var stats = dwebx.trackStats()
 
-    countFiles({ fs: dat.archive, name: '/' }, function (err, count) {
+    countFiles({ fs: dwebx.archive, name: '/' }, function (err, count) {
       t.ifError(err, 'count err')
-      var archive = dat.archive
+      var archive = dwebx.archive
 
       t.same(archive.version, 3, 'archive version still')
 
@@ -102,7 +102,7 @@ test('share: resume with .dat folder', function (t) {
       t.same(st.byteLength, fixtureStats.bytes, 'bytes total still the same')
       t.same(count.bytes, fixtureStats.bytes, 'bytes still ok')
       t.same(count.files, fixtureStats.files, 'bytes still ok')
-      dat.close(function () {
+      dwebx.close(function () {
         cleanFixtures(function () {
           t.end()
         })
@@ -111,18 +111,18 @@ test('share: resume with .dat folder', function (t) {
   })
 })
 
-test('share: resume with empty .dat folder', function (t) {
+test('share: resume with empty .dwebx folder', function (t) {
   var emptyPath = path.join(__dirname, 'empty')
-  Dat(emptyPath, function (err, dat) {
+  DWebX(emptyPath, function (err, dwebx) {
     t.error(err, 'cb without error')
-    t.false(dat.resumed, 'resume flag false')
+    t.false(dwebx.resumed, 'resume flag false')
 
-    dat.close(function () {
-      Dat(emptyPath, function (err, dat) {
+    dwebx.close(function () {
+      DWebX(emptyPath, function (err, dwebx) {
         t.error(err, 'cb without error')
-        t.ok(dat.resumed, 'resume flag set')
+        t.ok(dwebx.resumed, 'resume flag set')
 
-        dat.close(function () {
+        dwebx.close(function () {
           rimraf(emptyPath, function () {
             t.end()
           })
@@ -132,22 +132,22 @@ test('share: resume with empty .dat folder', function (t) {
   })
 })
 
-// TODO: live = false, not implemented yet in hyperdrive v8
+// TODO: live = false, not implemented yet in ddrive v8
 // test('share snapshot', function (t) {
-//   Dat(fixtures, { live: false }, function (err, dat) {
+//   DWebX(fixtures, { live: false }, function (err, dwebx) {
 //     t.error(err, 'share cb without error')
 
-//     t.ok(!dat.live, 'live false')
-//     dat.importFiles(function (err) {
+//     t.ok(!dwebx.live, 'live false')
+//     dwebx.importFiles(function (err) {
 //       t.error(err, 'no error')
-//       dat.archive.finalize(function (err) {
+//       dwebx.archive.finalize(function (err) {
 //         t.error(err, 'no error')
 
 //         // TODO: saving mtime breaks this
-//         // t.skip(fixturesKey, dat.key, 'TODO: key matches snapshot key')
+//         // t.skip(fixturesKey, dwebx.key, 'TODO: key matches snapshot key')
 
-//         dat.close(cleanFixtures(function () {
-//           rimraf.sync(path.join(fixtures, '.dat'))
+//         dwebx.close(cleanFixtures(function () {
+//           rimraf.sync(path.join(fixtures, '.dwebx'))
 //           t.end()
 //         }))
 //       })
@@ -157,10 +157,10 @@ test('share: resume with empty .dat folder', function (t) {
 
 if (!process.env.TRAVIS) {
   test('share: live - editing file', function (t) {
-    Dat(fixtures, function (err, dat) {
+    DWebX(fixtures, function (err, dwebx) {
       t.ifError(err, 'error')
 
-      var importer = dat.importFiles({ watch: true }, function (err) {
+      var importer = dwebx.importFiles({ watch: true }, function (err) {
         t.ifError(err, 'error')
         if (!err) t.fail('live import should not cb')
       })
@@ -172,10 +172,10 @@ if (!process.env.TRAVIS) {
       })
 
       function done () {
-        dat.archive.stat('/folder/empty.txt', function (err, stat) {
+        dwebx.archive.stat('/folder/empty.txt', function (err, stat) {
           t.ifError(err, 'error')
           t.same(stat.size, 9, 'empty file has new content')
-          dat.close(function () {
+          dwebx.close(function () {
             // make file empty again
             fs.writeFileSync(path.join(fixtures, 'folder', 'empty.txt'), '')
             t.end()
@@ -187,11 +187,11 @@ if (!process.env.TRAVIS) {
 
   test('share: live resume & create new file', function (t) {
     var newFile = path.join(fixtures, 'new.txt')
-    Dat(fixtures, function (err, dat) {
+    DWebX(fixtures, function (err, dwebx) {
       t.error(err, 'error')
-      t.ok(dat.resumed, 'was resumed')
+      t.ok(dwebx.resumed, 'was resumed')
 
-      var importer = dat.importFiles({ watch: true }, function (err) {
+      var importer = dwebx.importFiles({ watch: true }, function (err) {
         t.error(err, 'error')
         if (!err) t.fail('watch import should not cb')
       })
@@ -210,11 +210,11 @@ if (!process.env.TRAVIS) {
       }
 
       function done () {
-        dat.archive.stat('/new.txt', function (err, stat) {
+        dwebx.archive.stat('/new.txt', function (err, stat) {
           t.ifError(err, 'error')
           t.ok(stat, 'new file in archive')
           fs.unlink(newFile, function () {
-            dat.close(function () {
+            dwebx.close(function () {
               t.end()
             })
           })
@@ -231,18 +231,18 @@ test('share: cleanup', function (t) {
 })
 
 test('share: dir storage and opts.temp', function (t) {
-  Dat(fixtures, { temp: true }, function (err, dat) {
+  DWebX(fixtures, { temp: true }, function (err, dwebx) {
     t.error(err, 'error')
-    t.false(dat.resumed, 'resume flag false')
+    t.false(dwebx.resumed, 'resume flag false')
 
-    dat.importFiles(function (err) {
+    dwebx.importFiles(function (err) {
       t.error(err, 'error')
-      helpers.verifyFixtures(t, dat.archive, done)
+      helpers.verifyFixtures(t, dwebx.archive, done)
     })
 
     function done (err) {
       t.error(err, 'error')
-      dat.close(function () {
+      dwebx.close(function () {
         t.end()
       })
     }
@@ -250,18 +250,18 @@ test('share: dir storage and opts.temp', function (t) {
 })
 
 test('share: ram storage & import other dir', function (t) {
-  Dat(ram, function (err, dat) {
+  DWebX(ram, function (err, dwebx) {
     t.error(err, 'error')
-    t.false(dat.resumed, 'resume flag false')
+    t.false(dwebx.resumed, 'resume flag false')
 
-    dat.importFiles(fixtures, function (err) {
+    dwebx.importFiles(fixtures, function (err) {
       t.error(err, 'error')
-      helpers.verifyFixtures(t, dat.archive, done)
+      helpers.verifyFixtures(t, dwebx.archive, done)
     })
 
     function done (err) {
       t.error(err, 'error')
-      dat.close(function () {
+      dwebx.close(function () {
         t.end()
       })
     }
@@ -270,5 +270,5 @@ test('share: ram storage & import other dir', function (t) {
 
 function cleanFixtures (cb) {
   cb = cb || function () {}
-  rimraf(path.join(fixtures, '.dat'), cb)
+  rimraf(path.join(fixtures, '.dwebx'), cb)
 }

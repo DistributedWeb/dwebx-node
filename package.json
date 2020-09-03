@@ -1,7 +1,7 @@
 {
-  "name": "dat-node",
-  "version": "3.5.15",
-  "description": "Build node applications with Dat archives on the file system.",
+  "name": "dwebx-node",
+  "version": "1.0.0",
+  "description": "Build node applications with DWebX archives on the file system.",
   "main": "index.js",
   "scripts": {
     "deps": "dependency-check . && dependency-check . --extra --no-dev",
@@ -10,24 +10,24 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/datproject/dat-node.git"
+    "url": "git://github.com/distributedweb/dwebx-node.git"
   },
   "bugs": {
-    "url": "https://github.com/datproject/dat-node/issues"
+    "url": "https://github.com/distributedweb/dwebx-node/issues"
   },
-  "homepage": "http://datproject.org",
+  "homepage": "http://dwebx.org",
   "author": "Joe Hand <joe@hand.email>",
   "license": "MIT",
   "dependencies": {
-    "dat-ignore": "^2.1.2",
-    "dat-link-resolve": "^2.3.0",
-    "dat-storage": "^1.1.1",
-    "dat-swarm-defaults": "^1.0.2",
+    "dwebx-ignore": "git://github.com/DistributedWeb/dwebx-ignore.git#7e0966f2abb353d077e14b3ea3d207d30e99aa67",
+    "dwebx-link-resolve": "git://github.com/DistributedWeb/dwebx-link-resolve.git#24ef99019ffb3fc8ae5b0a917323196098a8b0d2",
+    "dwebx-storage": "git://github.com/DistributedWeb/dwebx-storage.git#54a117c487e60e0c4989781e3173f9a27a4437e3",
+    "dwebx-config": "git://github.com/DistributedWeb/dwebx-config.git#f39be9245f9814b757bdeceed794f449a74a56bc",
     "debug": "^4.1.0",
     "discovery-swarm": "^5.1.4",
-    "hyperdrive": "^9.14.5",
-    "hyperdrive-http": "^4.4.0",
-    "hyperdrive-network-speed": "^2.1.0",
+    "ddrive": "git://github.com/DistributedWeb/ddrive.git#e1c7b7e012285eaeba5cc0ea834c68ee98649857",
+    "ddrive-http": "git://github.com/DistributedWeb/ddrive-http.git#ba6757fddc712f6f925e37ac95a8ecdbb1057b13",
+    "ddrive-network-speed": "git://github.com/DistributedWeb/ddrive-network-speed.git#186956a13184cb40bca5cc1c56b32a56fb3fa8e9",
     "mirror-folder": "^3.0.0",
     "random-access-file": "^2.1.1",
     "random-access-memory": "^3.1.1",
@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "count-files": "^2.6.2",
-    "dat-encoding": "^5.0.0",
+    "dwebx-encoding": "git://github.com/DistributedWeb/dwebx-encoding.git#adbab1965b1152c3a7252ca01807e9744c713398",
     "dependency-check": "^3.2.0",
     "mkdirp": "^0.5.1",
     "nyc": "^13.3.0",
@@ -49,8 +49,8 @@
   },
   "keywords": [
     "data",
-    "dat",
-    "hyperdrive",
+    "dwebx",
+    "ddrive",
     "p2p"
   ]
 }
