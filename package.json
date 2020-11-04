@@ -1,7 +1,7 @@
 {
   "name": "dwebx-node",
   "version": "1.0.0",
-  "description": "Build node applications with DWebX archives on the file system.",
+  "description": "Node.js API for interacting with dWeb's legacy protocol.",
   "main": "index.js",
   "scripts": {
     "deps": "dependency-check . && dependency-check . --extra --no-dev",
@@ -10,13 +10,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/distributedweb/dwebx-node.git"
+    "url": "https://github.com/distributedweb/dwebx-node.git"
   },
   "bugs": {
     "url": "https://github.com/distributedweb/dwebx-node/issues"
   },
-  "homepage": "http://dwebx.org",
-  "author": "Joe Hand <joe@hand.email>",
+  "homepage": "https://dwebx.org",
+  "author": "Peeps Labs <peepslabs.gmail.com>",
   "license": "MIT",
   "dependencies": {
     "dwebx-ignore": "git://github.com/DistributedWeb/dwebx-ignore.git#7e0966f2abb353d077e14b3ea3d207d30e99aa67",
